@@ -100,7 +100,7 @@ let SprinkleBefore (input: List<string>) (beforeWord: string) =
             |[] -> output
     inner input []
 
-let SprinkleAfter (input: List<string>) (afterWord: string) =
+let sprinkleAfter (input: List<string>) (afterWord: string) =
     let rec inner  (input: List<string>) (output: List<string>) =
         match input with 
             |h::t -> match h= afterWord with 
@@ -109,21 +109,16 @@ let SprinkleAfter (input: List<string>) (afterWord: string) =
             |[] -> output
     inner input []
 
-let sprinklerbeforeParse (input: List<string>) (beforelist: List<string>) =
-    let rec inner (beforelist: List<string>) (output: List<string>) =
-        match beforelist with 
-            |h::t -> inner t (SprinkleBefore output h)
+let sprinkleParse (input: List<string>) (beforeWords: List<string>) (afterWords: List<string>) =
+    let rec beforeParse (beforeWords: List<string>) (output: List<string>) =
+        match beforeWords with 
+            |h::t -> beforeParse t (SprinkleBefore output h)
             |[] -> output
-    inner beforelist input
-
-let sprinklerafterParse (input: List<string>) (beforelist: List<string>) =
-    let rec inner (beforelist: List<string>) (output: List<string>) =
-        match beforelist with 
-            |h::t -> inner t (SprinkleAfter output h)
+    let rec afterParse (afterWords: List<string>) (output: List<string>) =
+        match afterWords with   
+            |h::t -> afterParse t (sprinkleAfter output h)
             |[] -> output
-    inner beforelist input
-        
-    
+    afterParse afterWords (beforeParse beforeWords input)  
              
 let commaSprinkler input =
     failwith "Not implemented"
