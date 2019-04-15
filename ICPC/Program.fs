@@ -1,5 +1,6 @@
 ﻿module ICPC
 open System
+open System.Diagnostics
 
 let stringToList (input:string) = 
     let rec inner i (newWord:string) (newList:List<string>) = 
@@ -14,8 +15,11 @@ let getCommaBeforeWords (input:List<string>) =
     let rec inner state (input:List<string>) (output:list<string>) =
         match state with
         |0 -> match input with
-            |(" "::t)|(","::t)|("."::t)|[] -> failwith "incorrect string format"
-            |s::t -> inner 1 t
+            |(" "::t) -> failwith "incorrect string format"
+            |(","::t) -> failwith "incorrect string format"
+            |("."::t) -> failwith "incorrect string format"
+            |[] -> failwith "incorrect string format"
+            |s::t -> inner 1 t output
         |1 -> match input with
             |","::t -> inner 2 t output
             |"."::t -> inner 5 t output
@@ -25,8 +29,11 @@ let getCommaBeforeWords (input:List<string>) =
             |" "::t -> inner 3 t output
             |_ -> failwith "incorrect string format"
         |3 -> match input with  
-            |","::t|" "::t|"."::t|[] -> failwith "incorrect string format"
-            |s::t -> inner 4 t (s @ output)
+            |","::t -> failwith "incorrect string format"
+            |" "::t -> failwith "incorrect string format"
+            |"."::t -> failwith "incorrect string format"
+            |[] -> failwith "incorrect string format"
+            |s::t -> inner 4 t ([s] @ output)
         |4 -> match input with
             |","::t -> inner 2 t output
             |"."::t -> inner 5 t output
@@ -37,9 +44,13 @@ let getCommaBeforeWords (input:List<string>) =
             |[] -> inner 7 input output
             |_ -> failwith "incorrect string format" 
         |6 -> match input with 
-            |" "::t|","::t|"."::t|[] -> failwith "incorrect string format"
+            |" "::t -> failwith "incorrect string format"
+            |","::t -> failwith "incorrect string format"
+            |"."::t -> failwith "incorrect string format"
+            |[] -> failwith "incorrect string format"
             |s::t -> inner 1 t output
         |7 -> output
+        |_ -> failwith "incorrect string format"
     inner 0 input []
 
 
