@@ -12,43 +12,92 @@ let stringToList (input:string) =
                     |s -> inner (i+1) (newWord + s) newList
     inner 1 "" []
 
+let ListToString (input:List<string>) =  
+    let rec inner (input:List<string>) newString =
+        match input with
+            |h::t -> inner t (newString + h)
+            |[] -> newString
+    inner input
+
+let listStringIsValid (input:List<string>) =
+    let rec inner state (input:List<string>) =
+        match state with
+        |0 -> match input with
+            |(" "::t) -> inner -1 [] 
+            |(","::t) -> inner -1 [] 
+            |("."::t) -> inner -1 [] 
+            |[] -> inner -1 [] 
+            |s::t -> inner 1 t 
+        |1 -> match input with
+            |","::t -> inner 2 t 
+            |"."::t -> inner 5 t 
+            |" "::t -> inner 6 t 
+            |_ -> inner -1 [] 
+        |2 -> match input with 
+            |" "::t -> inner 3 t 
+            |_ -> inner -1 [] 
+        |3 -> match input with  
+            |","::t -> inner -1 [] 
+            |" "::t -> inner -1 [] 
+            |"."::t -> inner -1 [] 
+            |[] -> inner -1 [] 
+            |s::t -> inner 4 t 
+        |4 -> match input with
+            |","::t -> inner 2 t 
+            |"."::t -> inner 5 t 
+            |" "::t -> inner 6 t 
+            |_ -> inner -1 [] 
+        |5 -> match input with 
+            |" "::t -> inner 6 t 
+            |[] -> inner 7 input 
+            |_ -> inner -1 [] 
+        |6 -> match input with 
+            |" "::t -> inner -1 [] 
+            |","::t -> inner -1 [] 
+            |"."::t -> inner -1 [] 
+            |[] -> inner -1 [] 
+            |s::t -> inner 1 t 
+        |7 -> true
+        |_ -> false
+    inner 0 input 
+
 let getCommaBeforeWords (input:List<string>) =
     let rec inner state (input:List<string>) (output:list<string>) =
         match state with
         |0 -> match input with
-            |(" "::t) -> failwith "incorrect string format"
-            |(","::t) -> failwith "incorrect string format"
-            |("."::t) -> failwith "incorrect string format"
-            |[] -> failwith "incorrect string format"
+            |(" "::t) -> inner -1 [] []
+            |(","::t) -> inner -1 [] []
+            |("."::t) -> inner -1 [] []
+            |[] -> inner -1 [] []
             |s::t -> inner 1 t output
         |1 -> match input with
             |","::t -> inner 2 t output
             |"."::t -> inner 5 t output
             |" "::t -> inner 6 t output
-            |_ -> failwith "incorrect string format" 
+            |_ -> inner -1 [] []
         |2 -> match input with 
             |" "::t -> inner 3 t output
-            |_ -> failwith "incorrect string format"
+            |_ -> inner -1 [] []
         |3 -> match input with  
-            |","::t -> failwith "incorrect string format"
-            |" "::t -> failwith "incorrect string format"
-            |"."::t -> failwith "incorrect string format"
-            |[] -> failwith "incorrect string format"
+            |","::t -> inner -1 [] []
+            |" "::t -> inner -1 [] []
+            |"."::t -> inner -1 [] []
+            |[] -> inner -1 [] []
             |s::t -> inner 4 t ([s] @ output)
         |4 -> match input with
             |","::t -> inner 2 t output
             |"."::t -> inner 5 t output
             |" "::t -> inner 6 t output
-            |_ -> failwith "incorrect string format"
+            |_ -> inner -1 [] []
         |5 -> match input with 
             |" "::t -> inner 6 t output
             |[] -> inner 7 input output
-            |_ -> failwith "incorrect string format" 
+            |_ -> inner -1 [] []
         |6 -> match input with 
-            |" "::t -> failwith "incorrect string format"
-            |","::t -> failwith "incorrect string format"
-            |"."::t -> failwith "incorrect string format"
-            |[] -> failwith "incorrect string format"
+            |" "::t -> inner -1 [] []
+            |","::t -> inner -1 [] []
+            |"."::t -> inner -1 [] []
+            |[] -> inner -1 [] []
             |s::t -> inner 1 t output
         |7 -> output
         |_ -> failwith "incorrect string format"
@@ -58,37 +107,37 @@ let getCommaAfterWords (input:List<string>) =
     let rec inner state (input:List<string>) (output:list<string>) (word:string) =
         match state with
         |0 -> match input with
-            |(" "::t) -> failwith "incorrect string format"
-            |(","::t) -> failwith "incorrect string format"
-            |("."::t) -> failwith "incorrect string format"
-            |[] -> failwith "incorrect string format"
+            |(" "::t) -> inner -1 [] [] ""
+            |(","::t) -> inner -1 [] [] ""
+            |("."::t) -> inner -1 [] [] ""
+            |[] -> inner -1 [] [] ""
             |s::t -> inner 1 t output s
         |1 -> match input with
             |","::t -> inner 2 t ([word] @ output) ""
             |"."::t -> inner 5 t output word
             |" "::t -> inner 6 t output word
-            |_ -> failwith "incorrect string format" 
+            |_ -> inner -1 [] [] ""
         |2 -> match input with 
             |" "::t -> inner 3 t output word
-            |_ -> failwith "incorrect string format"
+            |_ -> inner -1 [] [] ""
         |3 -> match input with  
-            |","::t -> failwith "incorrect string format"
-            |" "::t -> failwith "incorrect string format"
-            |"."::t -> failwith "incorrect string format"
-            |[] -> failwith "incorrect string format"
+            |","::t -> inner -1 [] [] ""
+            |" "::t -> inner -1 [] [] ""
+            |"."::t -> inner -1 [] [] ""
+            |[] -> inner -1 [] [] ""
             |s::t -> inner 1 t output s
         |5 -> match input with 
             |" "::t -> inner 6 t output word
             |[] -> inner 7 input output word
-            |_ -> failwith "incorrect string format" 
+            |_ -> inner -1 [] [] ""
         |6 -> match input with 
-            |" "::t -> failwith "incorrect string format"
-            |","::t -> failwith "incorrect string format"
-            |"."::t -> failwith "incorrect string format"
-            |[] -> failwith "incorrect string format"
+            |" "::t -> inner -1 [] [] ""
+            |","::t -> inner -1 [] [] ""
+            |"."::t -> inner -1 [] [] ""
+            |[] -> inner -1 [] [] ""
             |s::t -> inner 1 t output word
         |7 -> output
-        |_ -> failwith "incorrect string format"
+        |_ -> failwith "invalid string format"
     inner 0 input [] ""
 
 let SprinkleBefore (input: List<string>) (beforeWord: string) =
@@ -118,10 +167,18 @@ let sprinkleParse (input: List<string>) (beforeWords: List<string>) (afterWords:
         match afterWords with   
             |h::t -> afterParse t (sprinkleAfter output h)
             |[] -> output
-    afterParse afterWords (beforeParse beforeWords input)  
+    afterParse afterWords (beforeParse beforeWords input)
+    
+let sprinkle (input:List<string>) = 
+    let rec inner (input:List<string>) =
+        let newList = sprinkleParse input (getCommaBeforeWords input) (getCommaAfterWords input)
+        match newList = input with
+            |true -> newList
+            |false -> inner newList
+    inner input
              
-let commaSprinkler input =
-    failwith "Not implemented"
+let commaSprinkler (input:string) =
+    ListToString (sprinkle (stringToList input))
 
 let rivers input =
     failwith "Not implemented"
