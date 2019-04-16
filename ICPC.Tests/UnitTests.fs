@@ -86,11 +86,11 @@ let ``Rivers, error case 5`` () =
     rivers "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabc test" |> should equal None
 
 
-[<Test>]
-let ``Rivers, own`` () =
-   rivers "o to thr four five5 " |> should equal 5
+//[<Test>]
+//let ``Rivers, own`` () =
+ //  rivers "o to thr four five5 " |> should equal 5
 
 //Personal tests
-[<Test>]
-    stringToList "This, is a string" |> should equal (["This";",";" ";"is";" ";"a";" ";"string"])
+//[<Test>]
+ //   stringToList "This, is a string" |> should equal (["This";",";" ";"is";" ";"a";" ";"string"])
 
