@@ -5,10 +5,12 @@ open System
 
 let stringToList (input:string) = 
     let rec inner i (newWord:string) (newList:List<string>) = 
-        match i < input.Length with 
-        |false -> newList
+        match i < String.length(input) with 
+        |false -> List.rev ([newWord] @ newList)
         |true -> match input.[i .. i] with 
-                    |" "|"."|"," -> inner (i+1) "" ([input.[i..i]] @ [newWord] @ newList)
+                    |" "|"."|"," -> match newWord = "" with 
+                                    |true -> inner (i+1) "" ([input.[i..i]] @ newList)
+                                    |false -> inner (i+1) "" ([input.[i..i]] @ [newWord] @ newList)
                     |s -> inner (i+1) (newWord + s) newList
     inner 0 "" []
 
@@ -86,7 +88,7 @@ let getCommaBeforeWords (input:List<string>) =
                 |s::t -> inner 1 t ([s] @ output)
         |4 -> match input with 
                 |" "::t -> inner 5 t output
-                |[] -> inner 6 input output
+                |[""] -> inner 6 input output
                 |_ -> inner -1 [] []
         |5 -> match input with 
                 |" "::t -> inner -1 [] []
@@ -123,7 +125,7 @@ let getCommaAfterWords (input:List<string>) =
                 |s::t -> inner 1 t output s
         |4 -> match input with 
                 |" "::t -> inner 5 t output word
-                |[] -> inner 6 input output word
+                |[""] -> inner 6 input output word
                 |_ -> inner -1 [] [] ""
         |5 -> match input with 
                 |" "::t -> inner -1 [] [] ""

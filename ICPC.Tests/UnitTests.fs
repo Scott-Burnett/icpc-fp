@@ -88,4 +88,4 @@ let ``Rivers, error case 5`` () =
 //Personal tests
 [<Test>]
 let StringToListTest () =
-    stringToList "This, is a string" |> should equal ("This"::","::" ":: "is"::" "::"a"::" "::"string"::[])
+    stringToList "This, is a string" |> should equal (["This";",";" ";"is";" ";"a";" ";"string"])
