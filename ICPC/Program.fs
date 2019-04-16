@@ -183,6 +183,20 @@ let commaSprinkler (input:string) =
 let rivers input =
     failwith "Not implemented"
 
+let rec longest (words:string) current long =
+    match (current <= words.Length) with
+    |true -> 
+        match words[current] with
+        |' ' -> long = current
+        |_ -> longest words (current+1) 
+    |_ -> long
+    match words with 
+    |cwords -> longest cwords 0
+    |_ -> failwith "match on line 189 failed"
+
+    longest "things and stuff" 0 0
+
+
 [<EntryPoint>]
 let main argv =
     printfn "Hello World from F#!"
