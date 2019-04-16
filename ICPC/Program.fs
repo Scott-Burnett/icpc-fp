@@ -180,17 +180,27 @@ let sprinkle (input:List<string>) =
 let commaSprinkler (input:string) =
     ListToString (sprinkle (stringToList input))
 
-let rec longest (words:string) long current =
-    match current <= words.Length with
-    |true ->    let long = words.IndexOf(' ')
-                let current = words.IndexOf(' ',long+1)
-                match long >= current with 
-                |true -> longest words long long
-                |_ -> longest words current current
-    |_ -> long
-          
+//let rec longest (words:string) long current count=
+//    match count <= words.Length with
+//    |true ->    let current = words.IndexOf(' ')
+//                let long = words.IndexOf(' ',current+1)
+//                match long >= 0 with 
+//                |true ->     match long >= current with 
+//                             |true -> longest words long long (count+1)
+//                             |_ -> longest words long current (count+1)
+//               |_ -> let long = 0
+//                    match long >= current with 
+//                   |true -> longest words long long (count+1)
+//                  |_ -> longest words long current (count+1)
+//|_ -> long+1
+  
+//let checksplit words current=
+  //  let bob = longest words 0 0 0
+    
+    
 let rivers input =
-    longest input 0 0
+    failwith "shame"
+    //longest input 0 0 0
 
 
 
