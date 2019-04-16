@@ -91,6 +91,12 @@ let ``Rivers, error case 5`` () =
  //  rivers "o to thr four five5 " |> should equal 5
 
 //Personal tests
-//[<Test>]
- //   stringToList "This, is a string" |> should equal (["This";",";" ";"is";" ";"a";" ";"string"])
+[<Test>]
+let stringtolisttest () =
+   stringToList "This, is a string" |> should equal (["This";",";" ";"is";" ";"a";" ";"string"])
+
+[<Test>]
+let pruneTest () =
+    pruneList ["hello"; "yes";"hello"] |> should equal (["hello";"yes"])
+
 

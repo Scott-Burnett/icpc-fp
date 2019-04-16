@@ -5,12 +5,12 @@ open System
 
 let stringToList (input:string) = 
     let rec inner i (newWord:string) (newList:List<string>) = 
-        match i < String.length(input) with 
+        match i < input.Length with 
         |false -> List.rev ([newWord] @ newList)
         |true -> match input.[i .. i] with 
                     |" "|"."|"," -> match newWord = "" with 
-                                    |true -> inner (i+1) "" ([input.[i..i]] @ newList)
-                                    |false -> inner (i+1) "" ([input.[i..i]] @ [newWord] @ newList)
+                                    |true -> inner (i+1) "" (input.[i..i]::newList)
+                                    |false -> inner (i+1) "" (input.[i..i]::newWord::newList)
                     |s -> inner (i+1) (newWord + s) newList
     inner 0 "" []
 
@@ -20,6 +20,15 @@ let ListToString (input:List<string>) =
             |h::t -> inner t (newString + h)
             |[] -> newString
     inner input
+
+let pruneList (input:List<string>) = 
+    let rec inner (input:List<string>) (output:List<string>) = 
+        match input with 
+            |h::t -> match List.exists (fun s -> s = h) t with 
+                        |true -> inner t output
+                        |false -> inner t (h::output)
+            |[] -> output
+    inner input []        
 
 let listStringIsValid (input:List<string>) =
     let rec inner state (input:List<string>) =
@@ -85,7 +94,7 @@ let getCommaBeforeWords (input:List<string>) =
                 |" "::t -> inner -1 [] []
                 |"."::t -> inner -1 [] []
                 |[] -> inner -1 [] []
-                |s::t -> inner 1 t ([s] @ output)
+                |s::t -> inner 1 t (s::output)
         |4 -> match input with 
                 |" "::t -> inner 5 t output
                 |[""] -> inner 6 input output
@@ -96,7 +105,7 @@ let getCommaBeforeWords (input:List<string>) =
                 |"."::t -> inner -1 [] []
                 |[] -> inner -1 [] []
                 |s::t -> inner 1 t output
-        |6 -> Some output
+        |6 -> Some (pruneList output)
         |_ -> None
     inner 0 input []
 
@@ -110,7 +119,7 @@ let getCommaAfterWords (input:List<string>) =
                 |[] -> inner -1 [] [] ""
                 |s::t -> inner 1 t output s
         |1 -> match input with
-                |","::t -> inner 2 t ([word] @ output) ""
+                |","::t -> inner 2 t (word::output) ""
                 |"."::t -> inner 4 t output word
                 |" "::t -> inner 5 t output word
                 |_ -> inner -1 [] [] ""
@@ -133,44 +142,44 @@ let getCommaAfterWords (input:List<string>) =
                 |"."::t -> inner -1 [] [] ""
                 |[] -> inner -1 [] [] ""
                 |s::t -> inner 1 t output word
-        |6 -> Some output
+        |6 -> Some (pruneList output)
         |_ -> None
     inner 0 input [] ""
 
 let canHaveCommaBefore (input:List<string>) i =
-    match i = 0 with 
+    match i < 2 with 
         |true -> false
-        |false -> match input.[(i-2)..(i-1)] with
+        |false -> match input.[(i-1)..(i)] with
                     |[",";" "]|[".";" "] -> false
                     |_ -> true
 
 let canHaveCommaAfter (input:List<string>) i =
     match i >= input.Length with 
         |true -> false
-        |false -> match input.[i+1..i+1] with
+        |false -> match input.[i..i] with
                     |[","] -> false
                     |["."] -> false
                     |_ -> true
 
-let SprinkleBefore (Input: List<string>) (beforeWord: string) =
+let SprinkleBefore (input: List<string>) (beforeWord: string) =
     let rec inner  (input: List<string>) (output: List<string>) i =
         match input with 
             |h::t -> match h = beforeWord with
-                        |true -> match canHaveCommaBefore input i with  
-                                    |false -> inner t [h] (i+1)
-                                    |true -> inner t ([h] @ [" "] @ [","] @ output.[1..output.Length-1]) (i+1)
-                        |false -> inner t ([h] @ output) (i+1)
-            |[] ->List.rev output
-    inner Input [] 0
+                        |true -> match canHaveCommaBefore output i with  
+                                    |false -> inner t [h] i
+                                    |true -> inner t (h::" "::","::output.[1..output.Length-1]) (i+2)
+                        |false -> inner t (h::output) (output.Length-1)
+            |[] -> output
+    inner input [] 0
 
 let sprinkleAfter (input: List<string>) (afterWord: string) =
     let rec inner  (input: List<string>) (output: List<string>) (i:int) =
         match input with 
-            |h::t -> match h= afterWord with 
-                        |true -> match canHaveCommaAfter input i with 
-                                    |true -> inner t ([","] @ [h] @ output) (i+1)
-                                    |false -> inner t [h] (i+1)
-                        |false -> inner t ([h] @ output) (i+1)
+            |h::t -> match h = afterWord with 
+                        |true -> match canHaveCommaAfter t i with 
+                                    |true -> inner t (","::h::output) (i+2)
+                                    |false -> inner t [h] i
+                        |false -> inner t (h::output) (output.Length-1)
             |[] -> output
     inner input [] 0
 
