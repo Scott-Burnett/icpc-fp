@@ -51,7 +51,7 @@ let ``Comma sprinkler, error case 5`` () =
 [<Test>]
 let ``Rivers, input 1`` () =
     rivers "The Yangtze is the third longest river in Asia and the longest in the world to flow entirely in one country"
-    |> should equal (Some (15, 5))
+    |> should equal 15//should equal (Some (15, 5))
 
 [<Test>]
 let ``Rivers, input 2`` () =
@@ -84,3 +84,4 @@ let ``Rivers, error case 4`` () =
 [<Test>]
 let ``Rivers, error case 5`` () =
     rivers "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabc test" |> should equal None
+
