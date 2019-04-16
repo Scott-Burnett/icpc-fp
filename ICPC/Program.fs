@@ -10,7 +10,7 @@ let stringToList (input:string) =
         |true -> match input.[i .. i] with 
                     |" "|"."|"," -> inner (i+1) "" ([input.[i..i]] @ [newWord] @ newList)
                     |s -> inner (i+1) (newWord + s) newList
-    inner 1 "" []
+    inner 0 "" []
 
 let ListToString (input:List<string>) =  
     let rec inner (input:List<string>) newString =
@@ -23,40 +23,40 @@ let listStringIsValid (input:List<string>) =
     let rec inner state (input:List<string>) =
         match state with
         |0 -> match input with
-            |(" "::t) -> inner -1 [] 
-            |(","::t) -> inner -1 [] 
-            |("."::t) -> inner -1 [] 
-            |[] -> inner -1 [] 
-            |s::t -> inner 1 t 
+                |(" "::t) -> inner -1 [] 
+                |(","::t) -> inner -1 [] 
+                |("."::t) -> inner -1 [] 
+                |[] -> inner -1 [] 
+                |s::t -> inner 1 t 
         |1 -> match input with
-            |","::t -> inner 2 t 
-            |"."::t -> inner 5 t 
-            |" "::t -> inner 6 t 
-            |_ -> inner -1 [] 
+                |","::t -> inner 2 t 
+                |"."::t -> inner 5 t 
+                |" "::t -> inner 6 t 
+                |_ -> inner -1 [] 
         |2 -> match input with 
-            |" "::t -> inner 3 t 
-            |_ -> inner -1 [] 
+                |" "::t -> inner 3 t 
+                |_ -> inner -1 [] 
         |3 -> match input with  
-            |","::t -> inner -1 [] 
-            |" "::t -> inner -1 [] 
-            |"."::t -> inner -1 [] 
-            |[] -> inner -1 [] 
-            |s::t -> inner 4 t 
+                |","::t -> inner -1 [] 
+                |" "::t -> inner -1 [] 
+                |"."::t -> inner -1 [] 
+                |[] -> inner -1 [] 
+                |s::t -> inner 4 t 
         |4 -> match input with
-            |","::t -> inner 2 t 
-            |"."::t -> inner 5 t 
-            |" "::t -> inner 6 t 
-            |_ -> inner -1 [] 
+                |","::t -> inner 2 t 
+                |"."::t -> inner 5 t 
+                |" "::t -> inner 6 t 
+                |_ -> inner -1 [] 
         |5 -> match input with 
-            |" "::t -> inner 6 t 
-            |[] -> inner 7 input 
-            |_ -> inner -1 [] 
+                |" "::t -> inner 6 t 
+                |[] -> inner 7 input 
+                |_ -> inner -1 [] 
         |6 -> match input with 
-            |" "::t -> inner -1 [] 
-            |","::t -> inner -1 [] 
-            |"."::t -> inner -1 [] 
-            |[] -> inner -1 [] 
-            |s::t -> inner 1 t 
+                |" "::t -> inner -1 [] 
+                |","::t -> inner -1 [] 
+                |"."::t -> inner -1 [] 
+                |[] -> inner -1 [] 
+                |s::t -> inner 1 t 
         |7 -> Some input
         |_ -> None
     inner 0 input 
@@ -65,35 +65,35 @@ let getCommaBeforeWords (input:List<string>) =
     let rec inner state (input:List<string>) (output:list<string>) =
         match state with
         |0 -> match input with
-            |(" "::t) -> inner -1 [] []
-            |(","::t) -> inner -1 [] []
-            |("."::t) -> inner -1 [] []
-            |[] -> inner -1 [] []
-            |s::t -> inner 1 t output
+                |(" "::t) -> inner -1 [] []
+                |(","::t) -> inner -1 [] []
+                |("."::t) -> inner -1 [] []
+                |[] -> inner -1 [] []
+                |s::t -> inner 1 t output
         |1 -> match input with
-            |","::t -> inner 2 t output
-            |"."::t -> inner 4 t output
-            |" "::t -> inner 5 t output
-            |_ -> inner -1 [] []
+                |","::t -> inner 2 t output
+                |"."::t -> inner 4 t output
+                |" "::t -> inner 5 t output
+                |_ -> inner -1 [] []
         |2 -> match input with 
-            |" "::t -> inner 3 t output
-            |_ -> inner -1 [] []
+                |" "::t -> inner 3 t output
+                |_ -> inner -1 [] []
         |3 -> match input with  
-            |","::t -> inner -1 [] []
-            |" "::t -> inner -1 [] []
-            |"."::t -> inner -1 [] []
-            |[] -> inner -1 [] []
-            |s::t -> inner 1 t ([s] @ output)
+                |","::t -> inner -1 [] []
+                |" "::t -> inner -1 [] []
+                |"."::t -> inner -1 [] []
+                |[] -> inner -1 [] []
+                |s::t -> inner 1 t ([s] @ output)
         |4 -> match input with 
-            |" "::t -> inner 5 t output
-            |[] -> inner 6 input output
-            |_ -> inner -1 [] []
+                |" "::t -> inner 5 t output
+                |[] -> inner 6 input output
+                |_ -> inner -1 [] []
         |5 -> match input with 
-            |" "::t -> inner -1 [] []
-            |","::t -> inner -1 [] []
-            |"."::t -> inner -1 [] []
-            |[] -> inner -1 [] []
-            |s::t -> inner 1 t output
+                |" "::t -> inner -1 [] []
+                |","::t -> inner -1 [] []
+                |"."::t -> inner -1 [] []
+                |[] -> inner -1 [] []
+                |s::t -> inner 1 t output
         |6 -> Some output
         |_ -> None
     inner 0 input []
@@ -102,35 +102,35 @@ let getCommaAfterWords (input:List<string>) =
     let rec inner state (input:List<string>) (output:list<string>) (word:string) =
         match state with
         |0 -> match input with
-            |(" "::t) -> inner -1 [] [] ""
-            |(","::t) -> inner -1 [] [] ""
-            |("."::t) -> inner -1 [] [] ""
-            |[] -> inner -1 [] [] ""
-            |s::t -> inner 1 t output s
+                |(" "::t) -> inner -1 [] [] ""
+                |(","::t) -> inner -1 [] [] ""
+                |("."::t) -> inner -1 [] [] ""
+                |[] -> inner -1 [] [] ""
+                |s::t -> inner 1 t output s
         |1 -> match input with
-            |","::t -> inner 2 t ([word] @ output) ""
-            |"."::t -> inner 4 t output word
-            |" "::t -> inner 5 t output word
-            |_ -> inner -1 [] [] ""
+                |","::t -> inner 2 t ([word] @ output) ""
+                |"."::t -> inner 4 t output word
+                |" "::t -> inner 5 t output word
+                |_ -> inner -1 [] [] ""
         |2 -> match input with 
-            |" "::t -> inner 3 t output word
-            |_ -> inner -1 [] [] ""
+                |" "::t -> inner 3 t output word
+                |_ -> inner -1 [] [] ""
         |3 -> match input with  
-            |","::t -> inner -1 [] [] ""
-            |" "::t -> inner -1 [] [] ""
-            |"."::t -> inner -1 [] [] ""
-            |[] -> inner -1 [] [] ""
-            |s::t -> inner 1 t output s
+                |","::t -> inner -1 [] [] ""
+                |" "::t -> inner -1 [] [] ""
+                |"."::t -> inner -1 [] [] ""
+                |[] -> inner -1 [] [] ""
+                |s::t -> inner 1 t output s
         |4 -> match input with 
-            |" "::t -> inner 5 t output word
-            |[] -> inner 6 input output word
-            |_ -> inner -1 [] [] ""
+                |" "::t -> inner 5 t output word
+                |[] -> inner 6 input output word
+                |_ -> inner -1 [] [] ""
         |5 -> match input with 
-            |" "::t -> inner -1 [] [] ""
-            |","::t -> inner -1 [] [] ""
-            |"."::t -> inner -1 [] [] ""
-            |[] -> inner -1 [] [] ""
-            |s::t -> inner 1 t output word
+                |" "::t -> inner -1 [] [] ""
+                |","::t -> inner -1 [] [] ""
+                |"."::t -> inner -1 [] [] ""
+                |[] -> inner -1 [] [] ""
+                |s::t -> inner 1 t output word
         |6 -> Some output
         |_ -> None
     inner 0 input [] ""
@@ -164,8 +164,8 @@ let sprinkleParse (input: List<string>) (beforeWords: Option<List<string>>) (aft
             |[] -> output
     match beforeWords with 
         |Some beforeWords -> match afterWords with
-            |Some afterWords -> Some (afterParse afterWords (beforeParse beforeWords input))
-            |None -> None
+                                |Some afterWords -> Some (afterParse afterWords (beforeParse beforeWords input))
+                                |None -> None
         |None -> None
     
 let sprinkle (input:List<string>) = 
@@ -173,8 +173,8 @@ let sprinkle (input:List<string>) =
         let newList = sprinkleParse input (getCommaBeforeWords input) (getCommaAfterWords input)
         match newList with
             |(Some value) -> match value = input with
-                        |true -> Some value
-                        |false -> inner value
+                                |true -> Some (ListToString value)
+                                |false -> inner value
             |None -> None     
     inner input
              

@@ -84,3 +84,8 @@ let ``Rivers, error case 4`` () =
 [<Test>]
 let ``Rivers, error case 5`` () =
     rivers "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabc test" |> should equal None
+
+//Personal tests
+[<Test>]
+let StringToListTest () =
+    stringToList "This, is a string" |> should equal ("This"::","::" ":: "is"::" "::"a"::" "::"string"::[])
