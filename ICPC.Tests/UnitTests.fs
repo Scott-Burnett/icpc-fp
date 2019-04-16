@@ -89,3 +89,8 @@ let ``Rivers, error case 5`` () =
 [<Test>]
 let ``Rivers, own`` () =
    rivers "o to thr four five5" |> should equal 5
+
+//Personal tests
+[<Test>]
+let StringToListTest () =
+    stringToList "This, is a string" |> should equal ("This"::","::" ":: "is"::" "::"a"::" "::"string"::[])
