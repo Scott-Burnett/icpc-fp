@@ -152,7 +152,7 @@ let canHaveCommaAfter (input:List<string>) i =
                     |["."] -> false
                     |_ -> true
 
-let SprinkleBefore (Input: List<string>) (beforeWord: string) =
+let SprinkleBefore (input: List<string>) (beforeWord: string) =
     let rec inner  (input: List<string>) (output: List<string>) i =
         match input with 
             |h::t -> match h = beforeWord with
@@ -160,8 +160,8 @@ let SprinkleBefore (Input: List<string>) (beforeWord: string) =
                                     |false -> inner t [h] (i+1)
                                     |true -> inner t ([h] @ [" "] @ [","] @ output.[1..output.Length-1]) (i+1)
                         |false -> inner t ([h] @ output) (i+1)
-            |[] ->List.rev output
-    inner Input [] 0
+            |[] ->  List.rev output
+    inner input [] 0
 
 let sprinkleAfter (input: List<string>) (afterWord: string) =
     let rec inner  (input: List<string>) (output: List<string>) (i:int) =
