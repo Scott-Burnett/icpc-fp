@@ -94,8 +94,8 @@ let getCommaBeforeWords (input:List<string>) =
             |"."::t -> inner -1 [] []
             |[] -> inner -1 [] []
             |s::t -> inner 1 t output
-        |6 -> output
-        |_ -> failwith "incorrect string format"
+        |6 -> Some output
+        |_ -> None
     inner 0 input []
 
 let getCommaAfterWords (input:List<string>) =
@@ -131,8 +131,8 @@ let getCommaAfterWords (input:List<string>) =
             |"."::t -> inner -1 [] [] ""
             |[] -> inner -1 [] [] ""
             |s::t -> inner 1 t output word
-        |6 -> output
-        |_ -> failwith "invalid string format"
+        |6 -> Some output
+        |_ -> None
     inner 0 input [] ""
 
 let SprinkleBefore (input: List<string>) (beforeWord: string) =
@@ -153,7 +153,7 @@ let sprinkleAfter (input: List<string>) (afterWord: string) =
             |[] -> output
     inner input []
 
-let sprinkleParse (input: List<string>) (beforeWords: List<string>) (afterWords: List<string>) =
+let sprinkleParse (input: List<string>) (beforeWords: Option<List<string>>) (afterWords: Option<List<string>>) =
     let rec beforeParse (beforeWords: List<string>) (output: List<string>) =
         match beforeWords with 
             |h::t -> beforeParse t (SprinkleBefore output h)
@@ -162,18 +162,24 @@ let sprinkleParse (input: List<string>) (beforeWords: List<string>) (afterWords:
         match afterWords with   
             |h::t -> afterParse t (sprinkleAfter output h)
             |[] -> output
-    afterParse afterWords (beforeParse beforeWords input)
+    match beforeWords with 
+        |Some beforeWords -> match afterWords with
+            |Some afterWords -> Some (afterParse afterWords (beforeParse beforeWords input))
+            |None -> None
+        |None -> None
     
 let sprinkle (input:List<string>) = 
     let rec inner (input:List<string>) =
         let newList = sprinkleParse input (getCommaBeforeWords input) (getCommaAfterWords input)
-        match newList = input with
-            |true -> newList
-            |false -> inner newList
+        match newList with
+            |(Some value) -> match value = input with
+                        |true -> Some value
+                        |false -> inner value
+            |None -> None     
     inner input
              
 let commaSprinkler (input:string) =
-    Option.map ListToString (listStringIsValid (sprinkle (stringToList input)))
+    sprinkle (stringToList input)
 
 let rivers input =
     failwith "Not implemented"
