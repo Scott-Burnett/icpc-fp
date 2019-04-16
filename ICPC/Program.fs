@@ -5,10 +5,12 @@ open System
 
 let stringToList (input:string) = 
     let rec inner i (newWord:string) (newList:List<string>) = 
-        match i < input.Length with 
-        |false -> newList
+        match i < String.length(input) with 
+        |false -> List.rev ([newWord] @ newList)
         |true -> match input.[i .. i] with 
-                    |" "|"."|"," -> inner (i+1) "" ([input.[i..i]] @ [newWord] @ newList)
+                    |" "|"."|"," -> match newWord = "" with 
+                                    |true -> inner (i+1) "" ([input.[i..i]] @ newList)
+                                    |false -> inner (i+1) "" ([input.[i..i]] @ [newWord] @ newList)
                     |s -> inner (i+1) (newWord + s) newList
     inner 0 "" []
 
@@ -86,7 +88,7 @@ let getCommaBeforeWords (input:List<string>) =
                 |s::t -> inner 1 t ([s] @ output)
         |4 -> match input with 
                 |" "::t -> inner 5 t output
-                |[] -> inner 6 input output
+                |[""] -> inner 6 input output
                 |_ -> inner -1 [] []
         |5 -> match input with 
                 |" "::t -> inner -1 [] []
@@ -123,7 +125,7 @@ let getCommaAfterWords (input:List<string>) =
                 |s::t -> inner 1 t output s
         |4 -> match input with 
                 |" "::t -> inner 5 t output word
-                |[] -> inner 6 input output word
+                |[""] -> inner 6 input output word
                 |_ -> inner -1 [] [] ""
         |5 -> match input with 
                 |" "::t -> inner -1 [] [] ""
@@ -198,16 +200,38 @@ let commaSprinkler (input:string) =
 //let checksplit words current=
   //  let bob = longest words 0 0 0
     
-let covert (words:string) = 
-    failwith ""
+let tolistthing (input:string) = 
+    let rec inner i (newWord:string) (newList:List<string>) = 
+        match i < String.length(input) with 
+        |false -> List.rev ([newWord] @ newList)
+        |true -> match input.[i .. i] with 
+                    |" " -> match newWord = "" with 
+                                    |true -> inner (i+1) "" ([input.[i..i]] @ newList)
+                                    |false -> inner (i+1) "" ([input.[i..i]] @ [newWord] @ newList)
+                    |s -> inner (i+1) (newWord + s) newList
+    inner 0 "" []
         
         
     
-let spaceplace words =
-    
+let rec lengthOfthing words longest =
+    match words with
+    |head::tail -> match (head:string) with 
+                   |" " -> lengthOfthing tail longest//head = The     tail = " " "Yang..."
+                   |_ -> let long = (String.length(head))
+                         match long > longest with
+                         |true -> lengthOfthing tail long
+                         |_ -> lengthOfthing tail longest
+    |[] -> longest
+
+let rec tointlist words newList:list<int>=
+    match words with
+    |(head:string)::tail -> tointlist tail ([head.Length] @ newList)
+    |[] -> newList
+
 
 let rivers input =
-    failwith "shame"
+   tointlist (tolistthing input) []
+   //lengthOfthing (tolistthing input) 0    //failwith "shame"
     //longest input 0 0 0
 
 
