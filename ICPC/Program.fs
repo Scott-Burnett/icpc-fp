@@ -232,30 +232,36 @@ let tolistthing (input:string) =
         
         
     
-let rec lengthOfthing words longest =
+let rec toListint words newlist:list<int> =
     match words with
     |head::tail -> match (head:string) with 
-                   |" " -> lengthOfthing tail longest//head = The     tail = " " "Yang..."
-                   |_ -> let long = (String.length(head))
-                         match long > longest with
-                         |true -> lengthOfthing tail long
-                         |_ -> lengthOfthing tail longest
-    |[] -> longest
-
-let rec tointlist words newList:list<int>=
-    match words with
-    |(head:string)::tail -> tointlist tail ([head.Length] @ newList)
-    |[] -> newList
-
-
-let rivers input =
-   tointlist (tolistthing input) []
-   //lengthOfthing (tolistthing input) 0    //failwith "shame"
-    //longest input 0 0 0
-
+                   |" " -> toListint tail ([0] @ newlist)
+                   |_ ->  toListint tail ([head.Length] @ newlist)
+    |[] -> List.rev(newlist)
 
     
+let rec longest input temp= 
+    match input with 
+    |head::tail -> match head > temp with
+                   |true -> longest tail head
+                   |_ -> longest tail temp
+    |[] -> temp
 
+let rec spliting input count loop long=
+    match input with 
+    |head::tail -> match (loop%3=0),(head = 0) with 
+                   |true,false -> spliting tail (head+count) (loop+1) long
+                   |true, true -> spliting tail (1+count) (loop+1) long
+                   |false, true -> spliting tail (head+count) (loop+1) long
+                   |false, false -> spliting tail (1+count) (loop+1) long
+                   
+    |[] ->match count >= long with 
+          |true -> count
+          |_ -> spliting input long loop long
+
+let rivers input =
+  spliting (toListint (tolistthing input) []) 0 0 (longest (toListint (tolistthing input) []) 0) //failwith "shame"
+    
 
 [<EntryPoint>]
 let main argv =
